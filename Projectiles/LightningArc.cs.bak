@@ -1,0 +1,22 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace TacoMikesMod.Projectiles
+{
+    public class LightningArc : ModProjectile
+    {
+        public override void SetDefaults()
+        {
+            projectile.CloneDefaults(ProjectileID.CultistBossLightningOrbArc);
+            projectile.friendly = true;
+            projectile.hostile = false;
+            projectile.penetrate = 20;
+            aiType = ProjectileID.CultistBossLightningOrbArc;
+            
+        }
+
+    }
+}

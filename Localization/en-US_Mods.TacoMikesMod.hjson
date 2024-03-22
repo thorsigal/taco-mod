@@ -1,0 +1,64 @@
+Buffs: {
+	BaneDebuff: {
+		DisplayName: Blurple Drank
+		Description: You are clinically insane
+	}
+}
+
+Items: {
+	FlipFlapBlast: {
+		DisplayName: Hyper Oblivion Flip-Flap Blaster
+		Tooltip: "'obliviAWWWWWHhn'"
+	}
+
+	Gauntlet: {
+		DisplayName: Gauntlet of Thebees
+		Tooltip: Slightly mispronounced.
+	}
+
+	Jerkgoff: {
+		DisplayName: Grobbler
+		Tooltip: "'Our stars will blot out the sun.'"
+	}
+
+	LightningRod: {
+		DisplayName: Lightning Rod
+		Tooltip: Summons a deadly lightning bolt
+	}
+
+	ObamaSummon: {
+		DisplayName: Number 44
+		Tooltip: "'My fellow Terrarians...'"
+	}
+
+	SheerBees: {
+		DisplayName: True Tome of Bees
+		Tooltip: Next Generation, Truly Unlimited Bees
+	}
+
+	PGL: {
+		DisplayName: 40mm PGL
+		Tooltip: Consumes grenades
+	}
+
+	FatBoy: {
+		DisplayName: Fat Boy
+		Tooltip: ""
+	}
+
+	AdBreak: {
+		DisplayName: Ad Break
+		Tooltip: ""
+	}
+}
+
+Projectiles: {
+	Explosion.DisplayName: Explosion
+	LightningArc.DisplayName: Lightning Arc
+	Grob.DisplayName: Goober
+	ObamaSentry.DisplayName: Barack Obama
+	PDRClone.DisplayName: Death Ray
+	FatBoyShell.DisplayName: Fat Boy Shell
+	NukeEffect.DisplayName: Nuke Effect
+	Spotify.DisplayName: Spotify
+}

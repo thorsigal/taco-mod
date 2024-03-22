@@ -1,0 +1,3 @@
+displayName = Taco Mike's Mod
+author = Taco Mike
+version = 0.1
