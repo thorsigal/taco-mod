@@ -5,6 +5,8 @@ using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TacoMikesMod;
+using TacoMikesMod.Players;
+using System;
 
 namespace TacoMikesMod.Items
 {
@@ -22,7 +24,7 @@ namespace TacoMikesMod.Items
 			Item.width = 40;
 			Item.height = 40;
 			Item.useTime = 2;
-			Item.useAnimation = 30;
+			Item.useAnimation = 10;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 0;
 			Item.value = 10000;
@@ -46,22 +48,42 @@ namespace TacoMikesMod.Items
         public override void ModifyManaCost(Player player, ref float reduce, ref float mult)
         {
 			//charge shouldn't cost ridiculous mana
-			if(player.HasBuff(ModContent.BuffType<Buffs.EPCBuff>())) {
-				reduce -= 12f;
+			BikeGangPlayer modPlayer;
+			if(player.TryGetModPlayer<BikeGangPlayer>(out modPlayer)) {
+				if(!modPlayer.isCharging) {
+					reduce -= 12f;
+				}
 			}
         }
-		int EPCIndex = 0;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-			if(!player.HasBuff(ModContent.BuffType<Buffs.EPCBuff>())) {
-				//no reapply means buff needs to be 3 ticks
-				player.AddBuff(ModContent.BuffType<Buffs.EPCBuff>(),3);
-            	EPCIndex = Projectile.NewProjectile(source, position, velocity*3, ModContent.ProjectileType<Projectiles.EPC2>(), damage, knockback);
-			} else {
-				if(Main.projectile[EPCIndex].active) {
-					((Projectiles.EPC2)Main.projectile[EPCIndex].ModProjectile).addCharge(position,velocity,3);
+        {	
+
+			Vector2 gunTip = velocity;
+			gunTip.Normalize();
+			gunTip *= 50f;
+			gunTip += position;
+			Dust.NewDust(gunTip, 0, 0, DustID.ArgonMoss);
+			BikeGangPlayer modPlayer;
+			if(player.TryGetModPlayer<BikeGangPlayer>(out modPlayer)) {
+				if(!modPlayer.isCharging) {
+					modPlayer.isCharging = true;
+					modPlayer.EPCChargeIndex = Projectile.NewProjectile(source, gunTip, velocity*3, ModContent.ProjectileType<Projectiles.EPC2>(), damage, knockback);
+
 				}
-				player.AddBuff(ModContent.BuffType<Buffs.EPCBuff>(),3);
+				modPlayer.charge += 3;
+				modPlayer.epcShootPosition = gunTip;
+				modPlayer.epcVelocity = velocity;
+				if(modPlayer.charge > 90) {
+					float angleMax = ((float)modPlayer.charge-90)/18f;
+					Vector2 newDir = velocity.RotatedByRandom(MathHelper.ToRadians(angleMax));
+					float newAngle = newDir.ToRotation();
+					if (newDir.X <= 0)
+					{
+						newAngle += 3.1415926535f;
+					}
+					player.itemRotation = newAngle;
+				}
+
 			}
             return false;
         }

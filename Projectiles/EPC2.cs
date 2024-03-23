@@ -15,43 +15,39 @@ namespace TacoMikesMod.Projectiles
         bool enabled = false;
         public override void SetDefaults()
         {
-            Projectile.friendly = true;
+            Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.timeLeft = 600;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.penetrate = 999;
             Projectile.alpha=255;
 
         }
-        int charge = 0;
-        public void addCharge(Vector2 position, Vector2 velocity, int chargeAmount) {
-            Projectile.timeLeft = 600;
+
+
+        public void enable(int charge, Vector2 position, Vector2 velocity) {
             Projectile.position=position;
             Projectile.velocity=velocity;
-            charge += chargeAmount;
+            Projectile.damage+=charge;
+            if(charge < 90) {
+                if (Main.myPlayer == Projectile.owner)
+                {
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity*12, ModContent.ProjectileType<EPC1>(), Projectile.damage, Projectile.knockBack, Owner: Projectile.owner);
+                }
+                Projectile.Kill();
+                } else {
+                    Projectile.timeLeft = 600;
+                    Projectile.friendly=true;
+                    Projectile.tileCollide=true;
+                    Projectile.alpha=0;
+                    if (charge > 180) {
+                        empowered = true;
+                    }
+                }
         }
 
         public override void AI() {
-            if(!enabled) {
-                Player myOwner;
-                if(Projectile.TryGetOwner(out myOwner)) {
-                    if(!myOwner.HasBuff<Buffs.EPCBuff>()) {
-                        if(charge < 90) {
-                            if (Main.myPlayer == Projectile.owner)
-                            {
-                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity*12, ModContent.ProjectileType<EPC1>(), 0, 0, Owner: Projectile.owner);
-                            }
-                            Projectile.Kill();
-                            } else {
-                                Projectile.timeLeft = 600;
-                                Projectile.alpha=0;
-                                if (charge > 180) {
-                                    empowered = true;
-                                }
-                            }
-                    }
-                }
-            }
+            if(!enabled)
             base.AI();
         }
 
