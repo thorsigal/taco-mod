@@ -3,6 +3,11 @@ Buffs: {
 		DisplayName: Blurple Drank
 		Description: You are clinically insane
 	}
+
+	EPCBuff: {
+		DisplayName: E P C Buff
+		Description: Mods.TacoMikesMod.Buffs.EPCBuff.Description
+	}
 }
 
 Items: {
@@ -50,6 +55,11 @@ Items: {
 		DisplayName: Ad Break
 		Tooltip: ""
 	}
+
+	EPC: {
+		DisplayName: E P C
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
@@ -61,4 +71,6 @@ Projectiles: {
 	FatBoyShell.DisplayName: Fat Boy Shell
 	NukeEffect.DisplayName: Nuke Effect
 	Spotify.DisplayName: Spotify
+	EPC1.DisplayName: E P C1
+	EPC2.DisplayName: E P C2
 }

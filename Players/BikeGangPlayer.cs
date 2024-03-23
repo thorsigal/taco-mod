@@ -11,5 +11,6 @@ namespace TacoMikesMod.Players
 {
     class BikeGangPlayer : ModPlayer
     {
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
@@ -10,6 +11,8 @@ namespace TacoMikesMod.Projectiles
     {
 
         uint initialTime = 0;
+        bool empowered = false;
+        bool enabled = false;
         public override void SetDefaults()
         {
             Projectile.friendly = true;
@@ -17,10 +20,45 @@ namespace TacoMikesMod.Projectiles
             Projectile.timeLeft = 600;
             Projectile.tileCollide = true;
             Projectile.penetrate = 999;
+            Projectile.alpha=255;
 
+        }
+        int charge = 0;
+        public void addCharge(Vector2 position, Vector2 velocity, int chargeAmount) {
+            Projectile.timeLeft = 600;
+            Projectile.position=position;
+            Projectile.velocity=velocity;
+            charge += chargeAmount;
+        }
+
+        public override void AI() {
+            if(!enabled) {
+                Player myOwner;
+                if(Projectile.TryGetOwner(out myOwner)) {
+                    if(!myOwner.HasBuff<Buffs.EPCBuff>()) {
+                        if(charge < 90) {
+                            if (Main.myPlayer == Projectile.owner)
+                            {
+                                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity*12, ModContent.ProjectileType<EPC1>(), 0, 0, Owner: Projectile.owner);
+                            }
+                            Projectile.Kill();
+                            } else {
+                                Projectile.timeLeft = 600;
+                                Projectile.alpha=0;
+                                if (charge > 180) {
+                                    empowered = true;
+                                }
+                            }
+                    }
+                }
+            }
+            base.AI();
         }
 
 
+        public override void SetStaticDefaults() {
+			Main.projFrames[Projectile.type] = 5;
+		}
         public override bool PreDraw(ref Color lightColor)
         {
             uint time = Main.GameUpdateCount;
@@ -39,10 +77,10 @@ namespace TacoMikesMod.Projectiles
             // Calculating frameHeight and current Y pos dependence of frame
             // If texture without animation frameHeight is always texture.Height and startY is always 0
             int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-            uint deltaTime = (time - initialTime) / 5;
+            uint deltaTime = ((time - initialTime)/6)%5;
             int startY = 0;
             
-            startY = 220 - frameHeight * (int)deltaTime;
+            startY = 176 - frameHeight * (int)deltaTime;
 
             // Get this frame on texture
             Rectangle sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
@@ -54,7 +92,7 @@ namespace TacoMikesMod.Projectiles
 
             // If image isn't centered or symmetrical you can specify origin of the sprite
             // (0,0) for the upper-left corner
-            float offsetX = 20f;
+            float offsetX = 0f;
             origin.X = (float)(Projectile.spriteDirection == 1 ? sourceRectangle.Width - offsetX : offsetX);
 
             // If sprite is vertical
@@ -65,7 +103,7 @@ namespace TacoMikesMod.Projectiles
             // Applying lighting and draw current frame
             Color drawColor = Projectile.GetAlpha(lightColor);
             Main.EntitySpriteDraw(texture,
-                Projectile.Center - Main.screenPosition + new Vector2(70f, 0),
+                Projectile.Center - Main.screenPosition + new Vector2(0, 0),
                 sourceRectangle, drawColor, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0);
 
             // It's important to return false, otherwise we also draw the original texture.
