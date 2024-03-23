@@ -16,6 +16,7 @@ namespace TacoMikesMod.Projectiles
             Projectile.scale = 1f;
             Projectile.friendly=true;
             Projectile.hostile=false;
+            //TODO: lengthen hitbox
             
         }
         public override void OnSpawn(IEntitySource source)

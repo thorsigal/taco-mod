@@ -25,14 +25,15 @@ namespace TacoMikesMod.Projectiles
         }
 
 
-        public void enable(int charge, Vector2 position, Vector2 velocity) {
+        public int enable(int charge, Vector2 position, Vector2 velocity) {
+            int toReturn = -1;
             Projectile.position=position;
             Projectile.velocity=velocity;
-            Projectile.damage+=charge;
+            Projectile.damage+=charge/6;
             if(charge < 90) {
                 if (Main.myPlayer == Projectile.owner)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity*12, ModContent.ProjectileType<EPC1>(), Projectile.damage, Projectile.knockBack, Owner: Projectile.owner);
+                    toReturn = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity*12, ModContent.ProjectileType<EPC1>(), Projectile.damage, Projectile.knockBack, Owner: Projectile.owner);
                 }
                 Projectile.Kill();
                 } else {
@@ -44,6 +45,11 @@ namespace TacoMikesMod.Projectiles
                         empowered = true;
                     }
                 }
+                return toReturn;
+        }
+
+        public void KillTCF() {
+            Projectile.Kill();
         }
 
         public override void AI() {
